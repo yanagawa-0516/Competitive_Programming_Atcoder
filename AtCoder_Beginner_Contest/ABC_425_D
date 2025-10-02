@@ -7,7 +7,7 @@ int di[4]={-1,1,0,0};
 int dj[4]={0,0,-1,1};
 
 bool judgeGrid(int H,int W,int i,int j){
-    return 0<=i&&i<H&&0<=j&&j<W;
+  return 0<=i&&i<H&&0<=j&&j<W;
 }
 
 int count(vector<string>& S,int H,int W,int i,int j){
