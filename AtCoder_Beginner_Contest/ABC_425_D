@@ -1,1 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
 
+int di[4]={-1,1,0,0};
+int dj[4]={0,0,-1,1};
+
+bool judgeGrid(int H,int W,int i,int j){
+    return 0<=i&&i<H&&0<=j&&j<W;
+}
+
+int count(vector<string>& S,int H,int W,int i,int j){
+  int c=0;
+  for(int k=0;k<4;k++){
+    int ni=i+di[k],nj=j+dj[k];
+    if(!judgeGrid(H,W,ni,nj)) continue;
+    if(S[ni][nj]=='#') c++;
+  }
+  return c;
+}
+
+int main(){
+  int H,W;
+  cin>>H>>W;
+  vector<string> S(H);
+  for(int i=0;i<H;i++) cin>>S[i];
+  
+  vector<pair<int,int>> T;
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      if(S[i][j]=='.'&&count(S,H,W,i,j)==1) T.emplace_back(i,j);
+    }
+  }
+  
+  for(int iter=0;iter<H*W;iter++){
+    vector<pair<int,int>> newT=T;
+    T.clear();
+    
+    if(newT.empty()) break;
+    
+    for(auto [i,j]:newT){
+      S[i][j]='#';
+    }
+    
+    for(auto [i,j]:newT){
+      for(int k=0;k<4;k++){
+        int ni=i+di[k],nj=j+dj[k];
+        if(!judgeGrid(H,W,ni,nj)) continue;
+        if(S[ni][nj]=='.'&&count(S,H,W,ni,nj)==1) T.emplace_back(ni,nj);
+      }
+    }
+  }
+  
+  int ans=0;
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      if(S[i][j]=='#') ans++;
+    }
+  }
+  cout<<ans<<endl;
+  
+  return 0;
+}
