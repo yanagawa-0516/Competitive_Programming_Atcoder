@@ -1,0 +1,81 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <algorithm>
+using namespace std;
+
+class vec2{
+  public:
+  double x,y;
+  
+  vec2(double x,double y):x(x),y(y){}
+};
+
+vec2 add(vec2 a,vec2 b){
+  vec2 c(a.x+b.x,a.y+b.y);
+  return c;
+}
+  
+vec2 sub(vec2 a,vec2 b){
+  vec2 c(a.x-b.x,a.y-b.y);
+  return c;
+}
+
+vec2 scalar(double t,vec2 a){
+  vec2 c(t*a.x,t*a.y);
+  return c;
+}
+
+double inner(vec2 a,vec2 b){
+  return a.x*b.x+a.y*b.y;
+}
+  
+double size(vec2 a){
+  return sqrt(inner(a,a));
+}
+
+int main(){
+  int T;
+  cin>>T;
+  cout<<fixed<<setprecision(15);
+  
+  for(int iter=0;iter<T;iter++){
+    double TSX,TSY,TGX,TGY,ASX,ASY,AGX,AGY;
+    cin>>TSX>>TSY>>TGX>>TGY>>ASX>>ASY>>AGX>>AGY;
+    
+    vec2 OA(TSX,TSY),OB(TGX,TGY),OC(ASX,ASY),OD(AGX,AGY);
+    double p=size(sub(OB,OA)),q=size(sub(OD,OC));
+    
+    if(p<q){
+      swap(OA,OC);
+      swap(OB,OD);
+      swap(p,q);
+    }
+    vec2 OE=add(OA,scalar(q/p,sub(OB,OA)));
+    
+    double ans1=1000000;
+    vec2 vecX=sub(OA,OC),vecY=sub(sub(OE,OA),sub(OD,OC));
+    if(size(vecY)<1e-12) ans1=size(vecX);
+    else{
+      double A=-q*inner(vecX,vecY)/(size(vecY)*size(vecY));
+      if(A<=0) ans1=size(vecX);
+      else if(A>=q) ans1=size(add(vecX,vecY));
+      else ans1=size(add(vecX,scalar(A/q,vecY)));
+    }
+    
+    double ans2=1000000;
+    vec2 vecZ=sub(OE,OD),vecW=sub(OB,OE);
+    if(size(vecW)<1e-12) ans2=size(vecZ);
+    else{
+      double B=-(p-q)*inner(vecZ,vecW)/(size(vecW)*size(vecW));
+      if(B<=0) ans2=size(vecZ);
+      else if(B>=p-q) ans2=size(add(vecZ,vecW));
+      else ans2=size(add(vecZ,scalar(B/(p-q),vecW)));
+    }
+    
+    double ans=min(ans1,ans2);
+    cout<<ans<<endl;
+  }
+  
+  return 0;
+}
