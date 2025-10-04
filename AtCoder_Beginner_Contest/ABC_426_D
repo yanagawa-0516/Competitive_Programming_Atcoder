@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int answer(int N,string S,char c){
+  int C=0;
+  for(int i=0;i<N;i++){
+    if(S[i]==c) C++;
+  }
+  
+  int M=0;
+  for(int i=0;i<N;){
+    int j=i+1;
+    while(j<N&&S[j]==S[i]&&S[j]==c) j++;
+    int length=j-i;
+    M=max(M,length);
+    i=j;
+  }
+  
+  return 2*(C-M)+(N-C);
+}
+
+int main(){
+  int T;
+  cin>>T;
+  
+  for(int iter=0;iter<T;iter++){
+    int N;
+    string S;
+    cin>>N>>S;
+    
+    int ans=min(answer(N,S,'0'),answer(N,S,'1'));
+    cout<<ans<<endl;
+  }
+  
+  return 0;
+}
