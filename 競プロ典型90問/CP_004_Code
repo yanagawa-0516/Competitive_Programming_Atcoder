@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+  int H,W;
+  cin>>H>>W;
+  vector<vector<int>> A(H+1,vector<int>(W+1));
+  for(int i=1;i<=H;i++){
+    for(int j=1;j<=W;j++){
+      cin>>A[i][j];
+    }
+  }
+  
+  vector<int> hSum(H+1),wSum(W+1);
+  for(int i=1;i<=H;i++){
+    for(int j=1;j<=W;j++) hSum[i]+=A[i][j];
+  }
+  for(int j=1;j<=W;j++){
+    for(int i=1;i<=H;i++) wSum[j]+=A[i][j];
+  }
+  
+  for(int i=1;i<=H;i++){
+    for(int j=1;j<=W;j++){
+      cout<<hSum[i]+wSum[j]-A[i][j];
+      if(j!=W) cout<<" ";
+    }
+    cout<<endl;
+  }
+  
+  return 0;
+}
