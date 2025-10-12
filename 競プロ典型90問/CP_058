@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int MOD=100000;
+const long long MAX=100000;
+
+long long f(long long x){
+  long long dummy=x;
+  long long y=0;
+  while(dummy>0){
+    y+=dummy%10;
+    dummy/=10;
+  }
+  return (x+y)%MOD;
+}
+
+int main(){
+  long long N;
+  long long K;
+  cin>>N>>K;
+  
+  long long value[MAX];
+  for(long long i=0;i<MAX;i++) value[i]=f(i);
+  
+  if(K<=MAX){
+    for(long long i=0;i<K;i++){
+      N=value[N];
+    }
+    
+    cout<<N<<endl;
+    return 0;
+  }
+  
+  vector<bool> check(MAX,false);
+  vector<long long> a(MAX,-1);
+  a[N]=0;
+  long long toFirstIdx=-1;
+  long long loopNumber=0;
+  
+  for(long long i=0;i<=MAX;i++){
+    check[N]=true;
+    if(value[N]==N){
+      cout<<N<<endl;
+      return 0;
+    }
+    
+    if(check[value[N]]){
+      loopNumber=i-a[value[N]]+1;
+      toFirstIdx=a[value[N]];
+      break;
+    }
+    
+    N=value[N];
+    a[N]=i+1;
+  }
+  
+  long long idx=toFirstIdx+(K-toFirstIdx)%loopNumber;
+  for(long long i=0;i<MAX;i++){
+    if(a[i]==idx) {
+      cout<<i<<endl;
+      return 0;
+    }
+  }
+  
+  return 0;
+}
