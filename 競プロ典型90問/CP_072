@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int diri[4]={-1,1,0,0};
+int dirj[4]={0,0,-1,1};
+
+int function(int H,int W,vector<string> grid,vector<vector<bool>>& check,pair<int,int> now,pair<int,int> first){
+  if(now.first==first.first&&now.second==first.second&&check[now.first][now.second]) return 0;
+  check[now.first][now.second]=true;
+  
+  int t=-1000;
+  for(int d=0;d<4;d++){
+    pair<int,int> next={now.first+diri[d],now.second+dirj[d]};
+    if(next.first<0||next.first>=H||next.second<0||next.second>=W||grid[next.first][next.second]=='#') continue;
+    if((next.first!=first.first||next.second!=first.second)&&check[next.first][next.second]) continue;
+    int t0=function(H,W,grid,check,next,first);
+    t=max(t,t0+1);
+  }
+  
+  check[now.first][now.second]=false;
+  return t;
+}
+
+int main(){
+  int H,W;
+  cin>>H>>W;
+  
+  vector<string> grid(H);
+  for(int i=0;i<H;i++) cin>>grid[i];
+  
+  vector<vector<bool>> check(H,vector<bool>(W,false));
+  int ans=-1;
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      pair<int,int> now={i,j},first={i,j};
+      ans=max(ans,function(H,W,grid,check,now,first));
+    }
+  }
+  
+  if(ans>=3) cout<<ans<<endl;
+  else cout<<"-1"<<endl;
+  
+  return 0;
+}
