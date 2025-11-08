@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+using ull=unsigned long long;
+
+int main(){
+  int N;
+  cin>>N;
+  
+  vector<ull> A(N);
+  for(int i=0;i<N;i++) cin>>A[i];
+  
+  ull base=0;
+  vector<int> update(N,0);
+  int lastTime=0;
+  
+  int Q;
+  cin>>Q;
+  for(int j=1;j<=Q;j++){
+    int query;
+    cin>>query;
+    
+    if(query==1){
+      ull t;
+      cin>>t;
+      base=t;
+      lastTime=j;
+    }
+    
+    if(query==2){
+      ull i,t;
+      cin>>i>>t;
+      i--;
+      if(update[i]<lastTime) A[i]=base+t;
+      else A[i]+=t;
+      update[i]=j;
+    }
+    
+    if(query==3){
+      ull i;
+      cin>>i;
+      i--;
+      if(update[i]<lastTime) cout<<base<<endl;
+      else cout<<A[i]<<endl;
+    }
+  }
+  
+  return 0;
+}
