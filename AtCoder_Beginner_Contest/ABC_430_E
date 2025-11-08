@@ -1,0 +1,49 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+vector<int> Lps(string& pat){
+  int n=pat.size();
+  vector<int> lps(n);
+  
+  int len=0;
+  for(int i=1;i<n;i++){
+    while(len>0&&pat[i]!=pat[len]) len=lps[len-1];
+    if(pat[i]==pat[len]) len++;
+    lps[i]=len;
+  }
+  
+  return lps;
+}
+
+int Kmp(string& text,string& pat){
+  vector<int> lps=Lps(pat);
+  int n=text.size(),m=pat.size();
+  
+  int j=0;
+  for(int i=0;i<n;i++){
+    while(j>0&&text[i]!=pat[j]) j=lps[j-1];
+    if(text[i]==pat[j]) j++;
+    if(j==m) return i-m+1;
+  }
+  
+  return -1;
+}
+
+int main(){
+  int T;
+  cin>>T;
+  
+  for(int iter=0;iter<T;iter++){
+    string A,B;
+    cin>>A>>B;
+    
+    string A0=A+A;
+    int ans=Kmp(A0,B);
+    if(ans!=-1&&ans<(int)A.size()) cout<<ans<<endl;
+    else cout<<"-1"<<endl;
+  }
+  
+  return 0;
+}
