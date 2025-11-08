@@ -1,0 +1,60 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+using namespace std;
+using ull=unsigned long long;
+
+ull function1(ull n){
+  if(n==0) return n;
+  long double N=(long double)n;
+  ull r=(ull)floor(sqrt(N));
+  while((r+1)*(r+1)<=n) r++;
+  while(r*r>n) r--;
+  return r;
+}
+
+ull function2(ull n){
+  ull f=function1(n);
+  if(f*f==n) return f;
+  else return f+1;
+}
+
+ull digit(ull n,vector<ull>& p){
+  for(int d=1;d<20;d++){
+    if(n<p[d]) return d;
+  }
+  return 19;
+}
+
+int main(){
+  int T;
+  cin>>T;
+    
+  vector<ull> p(20,1);
+  for(int d=1;d<20;d++) p[d]=p[d-1]*10;
+    
+  for(int iter=0;iter<T;iter++){
+    ull C,D;
+    cin>>C>>D;
+    
+    ull minL=digit(C+1,p);
+    ull maxL=digit(C+D,p);
+    ull ans=0;
+    for(ull i=minL;i<=maxL;i++){
+      ull minB=max(p[i-1],C+1);
+      ull maxB=min(p[i]-1,C+D);
+      if(minB>maxB) continue;
+      ull base=C*p[i];
+      ull b1=base+minB;
+      ull b2=base+maxB;
+      ull x=function2(b1);
+      ull y=function1(b2);
+      if(x<=y) ans+=(y-x+1);
+    }
+    
+    cout<<ans<<endl;
+  }
+    
+  return 0;
+}
