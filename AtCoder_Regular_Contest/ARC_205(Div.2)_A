@@ -1,0 +1,28 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+  int N,Q;
+  cin>>N>>Q;
+  
+  vector<string> S(N);
+  for(int i=0;i<N;i++) cin>>S[i];
+  
+  vector<vector<int>> a(N,vector<int>(N));
+  for(int i=1;i<N;i++){
+    for(int j=1;j<N;j++){
+      int x=(S[i-1][j-1]=='.'&&S[i][j-1]=='.'&&S[i-1][j]=='.'&&S[i][j]=='.');
+      a[i][j]=a[i-1][j]+a[i][j-1]-a[i-1][j-1]+x;
+    }
+  }
+  
+  for(int iter=0;iter<Q;iter++){
+    int U,D,L,R;
+    cin>>U>>D>>L>>R;
+    U--; D--; L--; R--;
+    cout<<a[D][R]-a[U][R]-a[D][L]+a[U][L]<<endl;
+  }
+  
+  return 0;
+}
