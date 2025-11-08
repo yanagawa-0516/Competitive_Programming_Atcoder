@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+#include <set>
+#include <unordered_map>
+#include <algorithm>
+using namespace std;
+using ll=long long;
+const ll INF=(1LL<<60);
+
+int main(){
+  int N;
+  cin>>N;
+  
+  vector<ll> X(N);
+  for(int i=0;i<N;i++) cin>>X[i];
+  
+  set<ll> point;
+  unordered_map<ll,ll> d;
+  point.insert(0);
+  ll sum=0;
+  
+  for(int i=0;i<N;i++){
+    ll x=X[i];
+    
+    auto it=point.lower_bound(x);
+    ll s=INF,p=INF;
+    bool sFlag=false,pFlag=false;
+    if(it!=point.end()){
+      s=*it;
+      sFlag=true;
+    }
+    if(it!=point.begin()){
+      it--;
+      p=*it;
+      pFlag=true;
+    }
+    
+    ll dx=INF;
+    if(pFlag) dx=min(dx,x-p);
+    if(sFlag) dx=min(dx,s-x);
+    
+    point.insert(x);
+    d[x]=dx;
+    sum+=dx;
+    
+    if(pFlag){
+      ll p0=p;
+      ll old=d.count(p0)?d[p0]:0LL;
+      ll left=INF;
+      auto itp=point.find(p0);
+      if(itp!=point.begin()){
+        auto it0=itp;
+        it0--;
+        left=p0-*it0;
+      }
+      
+      ll now=min(left,x-p0);
+      d[p0]=now;
+      sum+=(now-old);
+    }
+    
+    if(sFlag){
+      ll s0=s;
+      ll old=d.count(s0)?d[s0]:0LL;
+      ll right=INF;
+      auto its=point.find(s0);
+      its++;
+      if(its!=point.end()) right=*its-s0;
+      
+      ll now=min(right,s0-x);
+      d[s0]=now;
+      sum+=(now-old);
+    }
+    
+    cout<<sum<<endl;
+  }
+  
+  return 0;
+}
