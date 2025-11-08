@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+  int H,W;
+  cin>>H>>W;
+  
+  vector<vector<long long>> A(H,vector<long long>(W));
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      cin>>A[i][j];
+    }
+  }
+  
+  vector<vector<long long>> B(H,vector<long long>(W));
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      cin>>B[i][j];
+    }
+  }
+  
+  long long ans=0;
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      if(A[i][j]==B[i][j]) continue;
+      
+      if(i==H-1||j==W-1){
+        cout<<"No"<<endl;
+        return 0;
+      }
+      
+      if(A[i][j]>B[i][j]){
+        long long t=A[i][j]-B[i][j];
+        ans+=t;
+        A[i][j]-=t;
+        A[i+1][j]-=t;
+        A[i][j+1]-=t;
+        A[i+1][j+1]-=t;
+      }
+      
+      if(A[i][j]<B[i][j]){
+        long long t=B[i][j]-A[i][j];
+        ans+=t;
+        A[i][j]+=t;
+        A[i+1][j]+=t;
+        A[i][j+1]+=t;
+        A[i+1][j+1]+=t;
+      }
+    }
+  }
+  
+  cout<<"Yes"<<endl;
+  cout<<ans<<endl;
+  
+  return 0;
+}
