@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+  int H,W,N,h,w;
+  cin>>H>>W>>N>>h>>w;
+  
+  vector<vector<int>> A(H+1,vector<int>(W+1));
+  vector<int> c(N+1);
+  for(int i=1;i<=H;i++){
+    for(int j=1;j<=W;j++){
+      cin>>A[i][j];
+      c[A[i][j]]++;
+    }
+  }
+  
+  vector<vector<vector<int>>> count(N+1,vector<vector<int>>(H+1,vector<int>(W+1)));
+  for(int x=1;x<=N;x++){
+    for(int i=1;i<=H;i++){
+      for(int j=1;j<=W;j++) count[x][i][j]=count[x][i-1][j]+count[x][i][j-1]-count[x][i-1][j-1]+(A[i][j]==x);
+    }
+  }
+  
+  for(int k=0;k<=H-h;k++){
+    for(int l=0;l<=W-w;l++){
+      int ans=0;
+      for(int x=1;x<=N;x++){
+        if(count[x][k+h][l+w]-count[x][k][l+w]-count[x][k+h][l]+count[x][k][l]<c[x]) ans++;
+      }
+      cout<<ans<<" ";
+    }
+    cout<<endl;
+  }
+  
+  return 0;
+}
