@@ -1,0 +1,20 @@
+#include <deque>
+using namespace std;
+
+int main(){
+  int Q;
+  cin>>Q;
+  
+  deque<long long> a;
+  for(int iter=0;iter<Q;iter++){
+    int t;
+    long long x;
+    cin>>t>>x;
+    
+    if(t==1) a.push_front(x);
+    if(t==2) a.push_back(x);
+    if(t==3) cout<<a[x-1]<<endl; 
+  }
+  
+  return 0;
+}
