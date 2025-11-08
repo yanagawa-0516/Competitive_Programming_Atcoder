@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main(){
+  int Q;
+  cin>>Q;
+  
+  vector<pair<int,int>> s;
+  for(int iter=0;iter<Q;iter++){
+    int q;
+    cin>>q;
+    
+    if(q==1){
+      char c;
+      cin>>c;
+      
+      int a=(c=='(')?1:-1;
+      if(s.empty()) s.push_back({a,min(0,a)});
+      else{
+        auto [prev1,prev2]=s.back();
+        s.push_back({prev1+a,min(prev2,prev1+a)});
+      }
+    }
+    
+    if(q==2){
+      s.pop_back();
+    }
+    
+    if(s.empty()) cout<<"Yes"<<endl;
+    else{
+      auto [sum,x]=s.back();
+      if(sum==0&&x>=0) cout<<"Yes"<<endl;
+      else cout<<"No"<<endl;
+    }
+  }
+  
+  return 0;
+}
